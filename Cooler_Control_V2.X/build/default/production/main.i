@@ -1147,8 +1147,9 @@ typedef uint16_t uintptr_t;
 # 24 "main.c" 2
 
 # 1 "./ADCMeasure.h" 1
-# 14 "./ADCMeasure.h"
+# 16 "./ADCMeasure.h"
 uint16_t ADCConversion(uint8_t channel);
+void sort(int *numOfSamples);
 void VoltageCheck(void);
 void TemperatureCheck(void);
 # 25 "main.c" 2
@@ -1196,6 +1197,6 @@ void main()
 
     while(1){
      VoltageCheck();
-
+     TemperatureCheck();
     }
 }

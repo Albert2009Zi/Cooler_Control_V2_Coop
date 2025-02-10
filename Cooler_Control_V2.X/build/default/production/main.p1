@@ -3,9 +3,12 @@ Version 4.0 HI-TECH Software Intermediate Code
 "11 ./init_periphery.h
 [; ;./init_periphery.h: 11: void Init_uC(void);
 [v _Init_uC `(v ~T0 @X0 0 ef ]
-"15 ./ADCMeasure.h
-[; ;./ADCMeasure.h: 15: void VoltageCheck(void);
+"18 ./ADCMeasure.h
+[; ;./ADCMeasure.h: 18: void VoltageCheck(void);
 [v _VoltageCheck `(v ~T0 @X0 0 ef ]
+"19
+[; ;./ADCMeasure.h: 19: void TemperatureCheck(void);
+[v _TemperatureCheck `(v ~T0 @X0 0 ef ]
 "54 C:/Program Files (x86)/Microchip/MPLABX/v5.40/packs/Microchip/PIC10-12Fxxx_DFP/1.3.46/xc8\pic\include\proc\pic12f675.h
 [; ;C:/Program Files (x86)/Microchip/MPLABX/v5.40/packs/Microchip/PIC10-12Fxxx_DFP/1.3.46/xc8\pic\include\proc\pic12f675.h: 54: __asm("INDF equ 00h");
 [; <" INDF equ 00h ;# ">
@@ -130,6 +133,8 @@ Version 4.0 HI-TECH Software Intermediate Code
 {
 "53
 [e ( _VoltageCheck ..  ]
+"54
+[e ( _TemperatureCheck ..  ]
 "55
 }
 [e :U 82 ]

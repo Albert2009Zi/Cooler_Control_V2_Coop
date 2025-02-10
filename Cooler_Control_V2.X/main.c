@@ -51,6 +51,6 @@ void main()
  
     while(1){  
      VoltageCheck(); 
-  //   TemperatureCheck(); 
+     TemperatureCheck(); 
     }  
 }

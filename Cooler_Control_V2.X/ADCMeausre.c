@@ -5,14 +5,27 @@
 
 #define _XTAL_FREQ   4000000 
 
-#define ERROR_OK  0
-#define ERROR_NOK 1
+volatile uint16_t adcValue = 0;
+
+//Median sorting filter
+void sort(int *numOfSamples) {
+    for (int cntOut = 0; cntOut < NUM_OF_SAMPLES - 1; cntOut++) {
+        for (int cntIn = 0; cntIn < NUM_OF_SAMPLES - cntOut - 1; cntIn++) {
+            if (numOfSamples[cntIn] > numOfSamples[cntIn + 1]) {
+                int tmpVal = numOfSamples[cntIn];
+                numOfSamples[cntIn] = numOfSamples[cntIn + 1];
+                numOfSamples[cntIn + 1] = tmpVal;
+            }
+        }
+    }
+}
 
 uint16_t ADCConversion(uint8_t channel){
 
        ADCON0      = 0;                   /* must after every new switch be*/ 
+       VCFG        = 0;
        ADON        = 1;                   /* ADC is ON                                       */
-       ADFM        = 1;                   /* ADC results is left justified                          */
+       ADFM        = 1;                   /* ADC results is left justified                   */
        
    switch(channel){
 	 case(VOLTAGE):
@@ -28,43 +41,42 @@ uint16_t ADCConversion(uint8_t channel){
 	}
                    
        ADIF     = 0;     
-       __delay_ms(2);
-       GO_nDONE = 1;                      /* Start conversion */
-       while(GO_nDONE);                   /* Wait of conversion ending */
-       return ((ADRESH << 8) + ADRESL);   /* return 10bit result */ 
+       __delay_us(100);
+       GO = 1;                      /* Start conversion */
+       while(ADIF != 1); 
+       
+       return (ADRESH << 8) + ADRESL;
 }
 
 void VoltageCheck(void){ 
-       
-       uint16_t adcValue = 0;
-       adcValue = ADCConversion(VOLTAGE);
-       uint8_t errorCode;
 
-   /* if ((adcValue > 90) && (adcValue < 140)){    
-       GP5 = 0;                                      //Device ON
-	   GP2 = 0;                                      //No sound
-       }  	   
-        else */
-        if (adcValue <= 80) { 
-           GP5 = 1; 
-	       TwoShortOneLong();
-           errorCode = ERROR_NOK;
-           }
-	      else if (adcValue >= 140){
-           GP5 = 1;
-	       TwoShortTwoLong();
-           errorCode = ERROR_NOK;
-           } 
-            else {
+   int samples[NUM_OF_SAMPLES]; //array of median sorting values
+       adcValue = 0;
               
-                  GP5 = 0;                                      //Device ON
-	              GP2 = 0;                                      //No sound
-                  
-                  if (errorCode == ERROR_NOK){
-                  __delay_ms(2500);
-                  errorCode = ERROR_OK;
-                  }
-          }
+   for (int cnt = 0; cnt < NUM_OF_SAMPLES; cnt++) {
+        samples[cnt] = ADCConversion(VOLTAGE);          // 
+    }
+    
+    sort(samples);  // Median sorting
+    
+    adcValue = samples[NUM_OF_SAMPLES / 2];  // Filtered value
+    
+       
+          if((adcValue > 85) && (adcValue < 130)) {
+              GP5 &= ~1;                                      //Device ON
+              GP2 &= ~1;                                      //No sound   
+          }   
+       
+       
+       else  if (adcValue <= 85) { 
+           GP5   |= 1; 
+       	   TwoShortOneLong();
+           }
+	      else if (adcValue >= 130){
+           GP5   |= 1;
+           TwoShortTwoLong();
+           } 
+            
 }
 	
 void TemperatureCheck(void){

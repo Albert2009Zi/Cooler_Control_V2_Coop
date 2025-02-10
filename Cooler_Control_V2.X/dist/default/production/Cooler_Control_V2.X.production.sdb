@@ -4,9 +4,13 @@
 [d chip 12F675 ]
 [d frameptr 0 ]
 "11 C:\dev\uC\PIC\TalkoS\Cooler_Control_V2\Cooler_Control_V2.X\ADCMeausre.c
+[v _sort sort `(v  1 e 1 0 ]
+"23
 [v _ADCConversion ADCConversion `(ui  1 e 2 0 ]
-"37
+"51
 [v _VoltageCheck VoltageCheck `(v  1 e 1 0 ]
+"82
+[v _TemperatureCheck TemperatureCheck `(v  1 e 1 0 ]
 "10 C:\Program Files\Microchip\xc8\v2.20\pic\sources\c90\common\sprcadd.c
 [v ___fladd __fladd `(d  1 e 4 0 ]
 "4 C:\Program Files\Microchip\xc8\v2.20\pic\sources\c90\common\Umul8_16.c
@@ -31,6 +35,8 @@
 [v _TwoShortTwoLong TwoShortTwoLong `(v  1 e 1 0 ]
 "42
 [v _ThreeShort ThreeShort `(v  1 e 1 0 ]
+"8 C:\dev\uC\PIC\TalkoS\Cooler_Control_V2\Cooler_Control_V2.X\ADCMeausre.c
+[v _adcValue adcValue `VEui  1 e 2 0 ]
 "218 C:/Program Files (x86)/Microchip/MPLABX/v5.40/packs/Microchip/PIC10-12Fxxx_DFP/1.3.46/xc8\pic\include\proc\pic12f675.h
 [v _GPIO GPIO `VEuc  1 e 1 @5 ]
 "564
@@ -59,8 +65,8 @@
 [v _CHS1 CHS1 `VEb  1 e 0 @251 ]
 "1573
 [v _GIE GIE `VEb  1 e 0 @95 ]
-"1582
-[v _GO_nDONE GO_nDONE `VEb  1 e 0 @249 ]
+"1576
+[v _GO GO `VEb  1 e 0 @249 ]
 "1591
 [v _GP2 GP2 `VEb  1 e 0 @42 ]
 "1597
@@ -86,14 +92,29 @@
 {
 "56
 } 0
-"37 C:\dev\uC\PIC\TalkoS\Cooler_Control_V2\Cooler_Control_V2.X\ADCMeausre.c
+"51 C:\dev\uC\PIC\TalkoS\Cooler_Control_V2\Cooler_Control_V2.X\ADCMeausre.c
 [v _VoltageCheck VoltageCheck `(v  1 e 1 0 ]
 {
-"39
-[v VoltageCheck@adcValue adcValue `ui  1 a 2 9 ]
-"41
-[v VoltageCheck@errorCode errorCode `uc  1 a 1 8 ]
-"68
+"56
+[v VoltageCheck@cnt cnt `i  1 a 2 37 ]
+"53
+[v VoltageCheck@samples samples `[10]i  1 a 20 17 ]
+"80
+} 0
+"11
+[v _sort sort `(v  1 e 1 0 ]
+{
+[v sort@numOfSamples numOfSamples `*.4i  1 a 1 wreg ]
+"15
+[v sort@tmpVal tmpVal `i  1 a 2 9 ]
+"13
+[v sort@cntIn cntIn `i  1 a 2 14 ]
+"12
+[v sort@cntOut cntOut `i  1 a 2 11 ]
+"11
+[v sort@numOfSamples numOfSamples `*.4i  1 a 1 wreg ]
+[v sort@numOfSamples numOfSamples `*.4i  1 a 1 13 ]
+"21
 } 0
 "33 C:\dev\uC\PIC\TalkoS\Cooler_Control_V2\Cooler_Control_V2.X\sounds.c
 [v _TwoShortTwoLong TwoShortTwoLong `(v  1 e 1 0 ]
@@ -105,6 +126,37 @@
 {
 "31
 } 0
+"13
+[v _LongSound LongSound `(v  1 e 1 0 ]
+{
+"18
+} 0
+"82 C:\dev\uC\PIC\TalkoS\Cooler_Control_V2\Cooler_Control_V2.X\ADCMeausre.c
+[v _TemperatureCheck TemperatureCheck `(v  1 e 1 0 ]
+{
+"84
+[v TemperatureCheck@adcValue adcValue `ui  1 a 2 5 ]
+"105
+} 0
+"23
+[v _ADCConversion ADCConversion `(ui  1 e 2 0 ]
+{
+[v ADCConversion@channel channel `uc  1 a 1 wreg ]
+[v ADCConversion@channel channel `uc  1 a 1 wreg ]
+"25
+[v ADCConversion@channel channel `uc  1 a 1 4 ]
+"49
+} 0
+"9 C:\dev\uC\PIC\TalkoS\Cooler_Control_V2\Cooler_Control_V2.X\init_periphery.c
+[v _Init_uC Init_uC `(v  1 e 1 0 ]
+{
+"45
+} 0
+"42 C:\dev\uC\PIC\TalkoS\Cooler_Control_V2\Cooler_Control_V2.X\sounds.c
+[v _ThreeShort ThreeShort `(v  1 e 1 0 ]
+{
+"47
+} 0
 "20
 [v _TimeOut TimeOut `(v  1 e 1 0 ]
 {
@@ -114,23 +166,4 @@
 [v _ShortSound ShortSound `(v  1 e 1 0 ]
 {
 "11
-} 0
-"11 C:\dev\uC\PIC\TalkoS\Cooler_Control_V2\Cooler_Control_V2.X\ADCMeausre.c
-[v _ADCConversion ADCConversion `(ui  1 e 2 0 ]
-{
-[v ADCConversion@channel channel `uc  1 a 1 wreg ]
-[v ADCConversion@channel channel `uc  1 a 1 wreg ]
-"13
-[v ADCConversion@channel channel `uc  1 a 1 4 ]
-"35
-} 0
-"9 C:\dev\uC\PIC\TalkoS\Cooler_Control_V2\Cooler_Control_V2.X\init_periphery.c
-[v _Init_uC Init_uC `(v  1 e 1 0 ]
-{
-"43
-} 0
-"13 C:\dev\uC\PIC\TalkoS\Cooler_Control_V2\Cooler_Control_V2.X\sounds.c
-[v _LongSound LongSound `(v  1 e 1 0 ]
-{
-"18
 } 0

@@ -27,7 +27,7 @@ void Init_uC(void){
     GP4     = 0;           /* Low level on GP4 (Pin 3), Cooler is OFF          */
     
     
-    VCFG    = 1;           /* Sets Vref = Vpin6                                */
+    VCFG    = 0;           /* Sets Vref = Vdd                                  */
     TRISIO0 = 1;           /* Sets GP0 (Pin 7) as input. Temperature control   */
     TRISIO1 = 1;           /* Sets GP1 (Pin 6) as input. Button control        */
     
@@ -35,7 +35,9 @@ void Init_uC(void){
     PEIE = 1;            
     GIE  = 1;	           /* Enable global interrupts                         */
     
-    LongSound();           /* System initialisation complete sound             */ 
+  //  LongSound();           /* System initialisation complete sound             */ 
+    
+    ThreeShort();
     
     GP5 = 0;
     __delay_ms(2500);

@@ -1151,8 +1151,9 @@ void Init_uC(void);
 # 3 "init_periphery.c" 2
 
 # 1 "./ADCMeasure.h" 1
-# 14 "./ADCMeasure.h"
+# 16 "./ADCMeasure.h"
 uint16_t ADCConversion(uint8_t channel);
+void sort(int *numOfSamples);
 void VoltageCheck(void);
 void TemperatureCheck(void);
 # 4 "init_periphery.c" 2
@@ -1193,7 +1194,7 @@ void Init_uC(void){
     GP4 = 0;
 
 
-    VCFG = 1;
+    VCFG = 0;
     TRISIO0 = 1;
     TRISIO1 = 1;
 
@@ -1201,7 +1202,9 @@ void Init_uC(void){
     PEIE = 1;
     GIE = 1;
 
-    LongSound();
+
+
+    ThreeShort();
 
     GP5 = 0;
     _delay((unsigned long)((2500)*(4000000/4000.0)));

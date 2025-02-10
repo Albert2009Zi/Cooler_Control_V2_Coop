@@ -1146,8 +1146,9 @@ typedef uint16_t uintptr_t;
 # 2 "ADCMeausre.c" 2
 
 # 1 "./ADCMeasure.h" 1
-# 14 "./ADCMeasure.h"
+# 16 "./ADCMeasure.h"
 uint16_t ADCConversion(uint8_t channel);
+void sort(int *numOfSamples);
 void VoltageCheck(void);
 void TemperatureCheck(void);
 # 3 "ADCMeausre.c" 2
@@ -1167,12 +1168,25 @@ void ThreeShort(void);
 
 
 
+volatile uint16_t adcValue = 0;
 
 
+void sort(int *numOfSamples) {
+    for (int cntOut = 0; cntOut < 10 - 1; cntOut++) {
+        for (int cntIn = 0; cntIn < 10 - cntOut - 1; cntIn++) {
+            if (numOfSamples[cntIn] > numOfSamples[cntIn + 1]) {
+                int tmpVal = numOfSamples[cntIn];
+                numOfSamples[cntIn] = numOfSamples[cntIn + 1];
+                numOfSamples[cntIn + 1] = tmpVal;
+            }
+        }
+    }
+}
 
 uint16_t ADCConversion(uint8_t channel){
 
        ADCON0 = 0;
+       VCFG = 0;
        ADON = 1;
        ADFM = 1;
 
@@ -1190,43 +1204,42 @@ uint16_t ADCConversion(uint8_t channel){
  }
 
        ADIF = 0;
-       _delay((unsigned long)((2)*(4000000/4000.0)));
-       GO_nDONE = 1;
-       while(GO_nDONE);
-       return ((ADRESH << 8) + ADRESL);
+       _delay((unsigned long)((100)*(4000000/4000000.0)));
+       GO = 1;
+       while(ADIF != 1);
+
+       return (ADRESH << 8) + ADRESL;
 }
 
 void VoltageCheck(void){
 
-       uint16_t adcValue = 0;
-       adcValue = ADCConversion(1);
-       uint8_t errorCode;
+   int samples[10];
+       adcValue = 0;
+
+   for (int cnt = 0; cnt < 10; cnt++) {
+        samples[cnt] = ADCConversion(1);
+    }
+
+    sort(samples);
+
+    adcValue = samples[10 / 2];
 
 
-
-
-
-
-        if (adcValue <= 80) {
-           GP5 = 1;
-        TwoShortOneLong();
-           errorCode = 1;
-           }
-       else if (adcValue >= 140){
-           GP5 = 1;
-        TwoShortTwoLong();
-           errorCode = 1;
-           }
-            else {
-
-                  GP5 = 0;
-               GP2 = 0;
-
-                  if (errorCode == 1){
-                  _delay((unsigned long)((2500)*(4000000/4000.0)));
-                  errorCode = 0;
-                  }
+          if((adcValue > 85) && (adcValue < 130)) {
+              GP5 &= ~1;
+              GP2 &= ~1;
           }
+
+
+       else if (adcValue <= 85) {
+           GP5 |= 1;
+           TwoShortOneLong();
+           }
+       else if (adcValue >= 130){
+           GP5 |= 1;
+           TwoShortTwoLong();
+           }
+
 }
 
 void TemperatureCheck(void){
