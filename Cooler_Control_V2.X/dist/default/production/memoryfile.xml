@@ -3,15 +3,15 @@
   <executable name="dist/default/production\Cooler_Control_V2.X.production.hex">
     <memory name="program">
       <units>words</units>
-      <length>1024</length>
-      <used>488</used>
-      <free>536</free>
+      <length>8192</length>
+      <used>1127</used>
+      <free>7065</free>
     </memory>
     <memory name="data">
       <units>bytes</units>
-      <length>64</length>
-      <used>43</used>
-      <free>21</free>
+      <length>1024</length>
+      <used>87</used>
+      <free>937</free>
     </memory>
   </executable>
 </project>

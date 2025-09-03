@@ -1,5 +1,5 @@
 build/default/production/main.p1:  \
 main.c  \
-ADCMeasure.h  \
-init_periphery.h  \
+interrupt.h  \
+initPeriphery.h  \
 sounds.h 

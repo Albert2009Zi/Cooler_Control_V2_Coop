@@ -1,42 +1,65 @@
-/**                                                  
- *  ==============================================================================
- *  PROJECT NAME: Cooler Control Hobby Project
- *  ==============================================================================
+/** 
+ *  ===================================================
+ *  DIY PROJECT NAME: COOLER CONTROL
+ *  ===================================================
  * 
  *  @Filename           :   main.c 
- *  @Date               :   19.11.2021
- *  @Reference          :   No reference
+ *  @Date               :   29.08.2025
+ *  @Reference          :   Power supply/converter 12V DC to 220V AC
+ *                          Temperature control
+ *                          Over and under Voltage control
+ *                          Cooler control
  *  @HW Compatibility   :   Microchip PIC12F675, 8bit, 8 Pin
- *  @Code reference     :   No reference
- *  @Specification      :   Technical Task from Alex Talko
- *  @SW Owner           :   Albert Ziatdinov/Alex Talko, Open Non-commercial use 
- *                          only  
- *  @Author             :   Albert Ziatdinov
+ *  @Code reference     :   PIC16F18015 Stack by Microchip 
+ *  @SW Owner           :   Privat authors
+ *                          Albert Ziatdinov ziatdinovar@gmail.com
+ *                          Alex Talko  
+ *  @Authors            :   Albert Ziatdinov
+ *                          Alex Talko
  * 
- * ================================================================================
- * System clock is configured to 4MHz
- * ================================================================================
+ *
+ * @section Introduction
+ * =====================
+ * This application makes for Power supply/converter 12V DC to 220V AC to 
+ * control:
+ *  - over and under voltage
+ *  - temperature
+ *  - instied temperture turn on the cooler and generate PWM signal
+ * 
+ * Important User-Inputs and Variables:
+ * ====================================
+ *  
+ * ***********************************
+ * System clock is configured to 32MHz
+ * ***********************************
  *
  *
  */
 
 #include <xc.h>
 #include <stdint.h>
-#include "ADCMeasure.h"
-#include "init_periphery.h"
+#include "interrupt.h"
+#include "initPeriphery.h"
 #include "sounds.h"
+
+#define _XTAL_FREQ 32000000 
 
 //#define SIMULATION
 
 #ifndef SIMULATION
-// CONFIG
-#pragma config FOSC = INTRCIO   // Oscillator Selection bits (INTOSC oscillator: I/O function on GP4/OSC2/CLKOUT pin, I/O function on GP5/OSC1/CLKIN)
-#pragma config WDTE = OFF       // Watchdog Timer Enable bit (WDT enabled)
-#pragma config PWRTE = OFF      // Power-Up Timer Enable bit (PWRT disabled)
-#pragma config MCLRE = ON       // GP3/MCLR pin function select (GP3/MCLR pin function is MCLR)
+// CONFIG1
+#pragma config FEXTOSC  = OFF            // External Oscillator Selection bits (Oscillator not enabled)
+#pragma config RSTOSC   = HFINTOSC_32MHz // Reset Oscillator Selection bits (HFINTOSC (32MHz))
+#pragma config CLKOUTEN = OFF            // Clock Out Enable bit (CLKOUT function is disabled; i/o or oscillator function on OSC2)
+#pragma config VDDAR    = HI             // VDD Range Analog Calibration Selection bit (Internal analog systems are calibrated for operation between VDD = 2.3 - 5.5V)
+
+// CONFIG2
+#pragma config WDTE  = OFF      // Watchdog Timer Enable bit (WDT enabled)
+#pragma config PWRTS = PWRT_OFF // Power-Up Timer Enable bit (PWRT disabled)
+#pragma config MCLRE = EXTMCLR  // GP3/MCLR pin function select (GP3/MCLR pin function is MCLR)
 #pragma config BOREN = ON       // Brown-out Detect Enable bit (BOD enabled)
-#pragma config CP = OFF         // Code Protection bit (Program Memory code protection is disabled)
-#pragma config CPD = OFF        // Data Code Protection bit (Data memory code protection is disabled)
+#pragma config CP    = OFF         // Code Protection bit (Program Memory code protection is disabled)
+#pragma config CPD   = OFF        // Data Code Protection bit (Data memory code protection is disabled)
 
 #else 
 // Config word
@@ -45,12 +68,16 @@ __CONFIG(FOSC_INTRCIO & WDTE_OFF & PWRTE_ON & MCLRE_OFF & BOREN_ON & CP_OFF & CP
 #endif
 
 // Main function
-void main()        
-{	
+int main()
+{   	
+    InitTimer0();
     Init_uC();
- 
+    
     while(1){  
-     VoltageCheck(); 
-     TemperatureCheck(); 
-    }  
+     ADCProcessing();  
+     PlayAlert();
+     BeepsStateMachine(); 
+    }
+    
+   return 0;   
 }

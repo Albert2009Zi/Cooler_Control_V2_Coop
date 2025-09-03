@@ -8,6 +8,8 @@
 #ifndef INIT_PERIPHERY_H
 #define	INIT_PERIPHERY_H
 
+void InitTimer0(void);
+
 void Init_uC(void);
 
 #endif	/* INIT_PERIPHERY_H */
